@@ -9,7 +9,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.0</version>
+        <!-- Java 17 compatible -->
+        <version>3.3.4</version>
         <relativePath/>
     </parent>
 
@@ -18,7 +19,8 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
-        <java.version>21</java.version>
+        <!-- Java 17 -->
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>
@@ -35,7 +37,7 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Security (needed for JWT classes & configs) -->
+        <!-- Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
