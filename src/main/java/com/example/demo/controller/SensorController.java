@@ -1,32 +1,34 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Token;
-import com.example.demo.service.TokenService;
+import com.example.demo.entity.SensorDevice;
+import com.example.demo.service.SensorService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/tokens")
-public class TokenController {
+@RequestMapping("/sensors")
+public class SensorController {
 
-    private final TokenService tokenService;
+    private final SensorService sensorService;
 
-    public TokenController(TokenService tokenService) {
-        this.tokenService = tokenService;
+    public SensorController(SensorService sensorService) {
+        this.sensorService = sensorService;
     }
 
-    @PostMapping("/counter/{counterId}")
-    public Token issueToken(@PathVariable Long counterId) {
-        return tokenService.issueToken(counterId);
+    @PostMapping
+    public SensorDevice register(@RequestBody SensorDevice sensor) {
+        return sensorService.register(sensor);
     }
 
-    @PutMapping("/{tokenId}/status")
-    public Token updateStatus(@PathVariable Long tokenId,
-                              @RequestParam String status) {
-        return tokenService.updateStatus(tokenId, status);
+    @PutMapping("/{id}/status")
+    public SensorDevice updateStatus(@PathVariable Long id,
+                                     @RequestParam Boolean active) {
+        return sensorService.updateStatus(id, active);
     }
 
-    @GetMapping("/{tokenId}")
-    public Token getToken(@PathVariable Long tokenId) {
-        return tokenService.getToken(tokenId);
+    @GetMapping
+    public List<SensorDevice> getAll() {
+        return sensorService.getAll();
     }
 }
