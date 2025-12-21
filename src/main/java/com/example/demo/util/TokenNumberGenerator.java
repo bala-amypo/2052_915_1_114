@@ -2,16 +2,18 @@ package com.example.demo.util;
 
 import com.example.demo.entity.ServiceCounter;
 
-public class TokenNumberGenerator {
+public final class TokenNumberGenerator {
 
-    private TokenNumberGenerator() {
     
+    private TokenNumberGenerator() {
     }
 
     public static String generate(ServiceCounter counter, int sequence) {
-        if (counter == null || counter.getCounterName() == null) {
+
+        if (counter == null || counter.getCounterName() == null || counter.getCounterName().isBlank()) {
             return "T-" + sequence;
         }
+
         return counter.getCounterName() + "-" + sequence;
     }
 }
