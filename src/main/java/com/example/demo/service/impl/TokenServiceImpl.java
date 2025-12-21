@@ -14,12 +14,10 @@ public class TokenServiceImpl implements TokenService {
     private final TokenLogRepository logRepository;
     private final QueuePositionRepository queueRepository;
 
-    public TokenServiceImpl(
-            TokenRepository tokenRepository,
-            ServiceCounterRepository counterRepository,
-            TokenLogRepository logRepository,
-            QueuePositionRepository queueRepository
-    ) {
+    public TokenServiceImpl(TokenRepository tokenRepository,
+                            ServiceCounterRepository counterRepository,
+                            TokenLogRepository logRepository,
+                            QueuePositionRepository queueRepository) {
         this.tokenRepository = tokenRepository;
         this.counterRepository = counterRepository;
         this.logRepository = logRepository;
@@ -44,6 +42,7 @@ public class TokenServiceImpl implements TokenService {
         token.setServiceCounter(counter);
         token.setStatus("WAITING");
         token.setTokenNumber(counter.getCounterName() + "-" + (waiting.size() + 1));
+        token.setIssuedAt(LocalDateTime.now());
 
         Token saved = tokenRepository.save(token);
 
@@ -54,7 +53,7 @@ public class TokenServiceImpl implements TokenService {
 
         TokenLog log = new TokenLog();
         log.setToken(saved);
-        log.setMessage("Token issued");
+        log.setLogMessage("Token issued");
         logRepository.save(log);
 
         return saved;
@@ -66,7 +65,7 @@ public class TokenServiceImpl implements TokenService {
                 .orElseThrow(() -> new RuntimeException("Token not found"));
 
         if ("WAITING".equals(token.getStatus()) && "COMPLETED".equals(status)) {
-            throw new IllegalArgumentException("Invalid status");
+            throw new IllegalArgumentException("Invalid status transition");
         }
 
         token.setStatus(status);
@@ -79,7 +78,7 @@ public class TokenServiceImpl implements TokenService {
 
         TokenLog log = new TokenLog();
         log.setToken(token);
-        log.setMessage("Status changed");
+        log.setLogMessage("Status updated to " + status);
         logRepository.save(log);
 
         return token;

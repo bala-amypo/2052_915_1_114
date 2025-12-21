@@ -6,22 +6,22 @@ import com.example.demo.repository.QueuePositionRepository;
 import com.example.demo.repository.TokenRepository;
 import com.example.demo.service.QueueService;
 
+import java.time.LocalDateTime;
+
 public class QueueServiceImpl implements QueueService {
 
     private final QueuePositionRepository queueRepository;
     private final TokenRepository tokenRepository;
 
-    public QueueServiceImpl(
-            QueuePositionRepository queueRepository,
-            TokenRepository tokenRepository
-    ) {
+    public QueueServiceImpl(QueuePositionRepository queueRepository,
+                            TokenRepository tokenRepository) {
         this.queueRepository = queueRepository;
         this.tokenRepository = tokenRepository;
     }
 
     @Override
-    public QueuePosition updateQueuePosition(Long tokenId, int position) {
-        if (position < 1) {
+    public QueuePosition updateQueuePosition(Long tokenId, Integer newPosition) {
+        if (newPosition < 1) {
             throw new IllegalArgumentException("Position must be >= 1");
         }
 
@@ -30,7 +30,8 @@ public class QueueServiceImpl implements QueueService {
 
         QueuePosition qp = new QueuePosition();
         qp.setToken(token);
-        qp.setPosition(position);
+        qp.setPosition(newPosition);
+        qp.setUpdatedAt(LocalDateTime.now());
 
         return queueRepository.save(qp);
     }
