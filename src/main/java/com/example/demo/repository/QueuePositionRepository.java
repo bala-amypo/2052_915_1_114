@@ -1,12 +1,3 @@
-package com.example.demo.repository;
-
-import com.example.demo.entity.QueuePosition;
-
-import java.util.Optional;
-
-public interface QueuePositionRepository {
-
-    QueuePosition save(QueuePosition position);
-
+public interface QueuePositionRepository extends JpaRepository<QueuePosition, Long> {
     Optional<QueuePosition> findByToken_Id(Long tokenId);
 }
