@@ -3,10 +3,12 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.TokenService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service   // 🔴 THIS IS REQUIRED
 public class TokenServiceImpl implements TokenService {
 
     private final TokenRepository tokenRepository;
@@ -26,7 +28,6 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public Token issueToken(Long counterId) {
-
         ServiceCounter counter = counterRepository.findById(counterId)
                 .orElseThrow(() -> new RuntimeException("Counter not found"));
 
@@ -46,10 +47,10 @@ public class TokenServiceImpl implements TokenService {
                         counterId, "WAITING"
                 );
 
-        QueuePosition position = new QueuePosition();
-        position.setToken(token);
-        position.setPosition(waiting.size());
-        queueRepository.save(position);
+        QueuePosition qp = new QueuePosition();
+        qp.setToken(token);
+        qp.setPosition(waiting.size());
+        queueRepository.save(qp);
 
         TokenLog log = new TokenLog();
         log.setToken(token);
@@ -61,7 +62,6 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public Token updateStatus(Long tokenId, String status) {
-
         Token token = tokenRepository.findById(tokenId)
                 .orElseThrow(() -> new RuntimeException("Token not found"));
 
@@ -70,7 +70,6 @@ public class TokenServiceImpl implements TokenService {
         }
 
         token.setStatus(status);
-
         if (!"WAITING".equals(status)) {
             token.setCompletedAt(LocalDateTime.now());
         }
