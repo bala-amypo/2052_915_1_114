@@ -3,21 +3,24 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.ServiceCounter;
 import com.example.demo.repository.ServiceCounterRepository;
 import com.example.demo.service.ServiceCounterService;
+
 import java.util.List;
 
 public class ServiceCounterServiceImpl implements ServiceCounterService {
 
-    private final ServiceCounterRepository repo;
+    private final ServiceCounterRepository repository;
 
-    public ServiceCounterServiceImpl(ServiceCounterRepository repo) {
-        this.repo = repo;
+    public ServiceCounterServiceImpl(ServiceCounterRepository repository) {
+        this.repository = repository;
     }
 
+    @Override
     public ServiceCounter addCounter(ServiceCounter sc) {
-        return repo.save(sc);
+        return repository.save(sc);
     }
 
+    @Override
     public List<ServiceCounter> getActiveCounters() {
-        return repo.findByIsActiveTrue();
+        return repository.findByIsActiveTrue();
     }
 }

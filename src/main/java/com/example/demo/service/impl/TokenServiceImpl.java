@@ -26,51 +26,52 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public Token issueToken(Long counterId) {
+
         ServiceCounter counter = counterRepository.findById(counterId)
                 .orElseThrow(() -> new RuntimeException("Counter not found"));
 
-        if (!counter.getIsActive()) {
+        if (!Boolean.TRUE.equals(counter.getIsActive())) {
             throw new IllegalArgumentException("Counter not active");
         }
+
+        Token token = new Token();
+        token.setServiceCounter(counter);
+        token.setStatus("WAITING");
+        token.setTokenNumber(counter.getCounterName() + "-" + System.nanoTime());
+
+        token = tokenRepository.save(token);
 
         List<Token> waiting =
                 tokenRepository.findByServiceCounter_IdAndStatusOrderByIssuedAtAsc(
                         counterId, "WAITING"
                 );
 
-        Token token = new Token();
-        token.setServiceCounter(counter);
-        token.setStatus("WAITING");
-        token.setTokenNumber(counter.getCounterName() + "-" + (waiting.size() + 1));
-        token.setIssuedAt(LocalDateTime.now());
-
-        Token saved = tokenRepository.save(token);
-
-        QueuePosition qp = new QueuePosition();
-        qp.setToken(saved);
-        qp.setPosition(waiting.size() + 1);
-        queueRepository.save(qp);
+        QueuePosition position = new QueuePosition();
+        position.setToken(token);
+        position.setPosition(waiting.size());
+        queueRepository.save(position);
 
         TokenLog log = new TokenLog();
-        log.setToken(saved);
-        log.setLogMessage("Token issued");
+        log.setToken(token);
+        log.setMessage("Issued");
         logRepository.save(log);
 
-        return saved;
+        return token;
     }
 
     @Override
     public Token updateStatus(Long tokenId, String status) {
+
         Token token = tokenRepository.findById(tokenId)
                 .orElseThrow(() -> new RuntimeException("Token not found"));
 
         if ("WAITING".equals(token.getStatus()) && "COMPLETED".equals(status)) {
-            throw new IllegalArgumentException("Invalid status transition");
+            throw new IllegalArgumentException("Invalid status");
         }
 
         token.setStatus(status);
 
-        if ("COMPLETED".equals(status) || "CANCELLED".equals(status)) {
+        if (!"WAITING".equals(status)) {
             token.setCompletedAt(LocalDateTime.now());
         }
 
@@ -78,15 +79,15 @@ public class TokenServiceImpl implements TokenService {
 
         TokenLog log = new TokenLog();
         log.setToken(token);
-        log.setLogMessage("Status updated to " + status);
+        log.setMessage("Status changed to " + status);
         logRepository.save(log);
 
         return token;
     }
 
     @Override
-    public Token getToken(Long tokenId) {
-        return tokenRepository.findById(tokenId)
+    public Token getToken(Long id) {
+        return tokenRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Token not found"));
     }
 }

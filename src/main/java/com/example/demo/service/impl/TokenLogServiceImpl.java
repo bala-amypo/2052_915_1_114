@@ -1,30 +1,39 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.*;
-import com.example.demo.repository.*;
+import com.example.demo.entity.Token;
+import com.example.demo.entity.TokenLog;
+import com.example.demo.repository.TokenLogRepository;
+import com.example.demo.repository.TokenRepository;
 import com.example.demo.service.TokenLogService;
+
 import java.util.List;
 
 public class TokenLogServiceImpl implements TokenLogService {
 
-    private final TokenLogRepository repo;
-    private final TokenRepository tokenRepo;
+    private final TokenLogRepository logRepository;
+    private final TokenRepository tokenRepository;
 
-    public TokenLogServiceImpl(TokenLogRepository r, TokenRepository t) {
-        this.repo = r;
-        this.tokenRepo = t;
+    public TokenLogServiceImpl(TokenLogRepository logRepository,
+                               TokenRepository tokenRepository) {
+        this.logRepository = logRepository;
+        this.tokenRepository = tokenRepository;
     }
 
+    @Override
     public TokenLog addLog(Long tokenId, String msg) {
-        Token t = tokenRepo.findById(tokenId)
+
+        Token token = tokenRepository.findById(tokenId)
                 .orElseThrow(() -> new RuntimeException("Token not found"));
+
         TokenLog log = new TokenLog();
-        log.setToken(t);
+        log.setToken(token);
         log.setMessage(msg);
-        return repo.save(log);
+
+        return logRepository.save(log);
     }
 
+    @Override
     public List<TokenLog> getLogs(Long tokenId) {
-        return repo.findByToken_IdOrderByLoggedAtAsc(tokenId);
+        return logRepository.findByToken_IdOrderByLoggedAtAsc(tokenId);
     }
 }
