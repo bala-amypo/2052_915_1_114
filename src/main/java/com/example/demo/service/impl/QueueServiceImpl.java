@@ -5,7 +5,9 @@ import com.example.demo.entity.Token;
 import com.example.demo.repository.QueuePositionRepository;
 import com.example.demo.repository.TokenRepository;
 import com.example.demo.service.QueueService;
+import org.springframework.stereotype.Service;
 
+@Service   // 🔴 REQUIRED
 public class QueueServiceImpl implements QueueService {
 
     private final QueuePositionRepository queueRepository;
@@ -39,7 +41,4 @@ public class QueueServiceImpl implements QueueService {
 
     @Override
     public QueuePosition getPosition(Long tokenId) {
-        return queueRepository.findByToken_Id(tokenId)
-                .orElseThrow(() -> new RuntimeException("Position not found"));
-    }
-}
+        return queueRep
