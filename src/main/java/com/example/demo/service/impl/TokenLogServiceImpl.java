@@ -26,3 +26,5 @@ public class TokenLogServiceImpl implements TokenLogService {
 
         Token token = tokenRepository.findById(tokenId)
                 .orElseThrow(() -> new RuntimeException("Token not found"));
+}
+}

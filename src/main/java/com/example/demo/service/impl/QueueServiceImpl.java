@@ -41,4 +41,7 @@ public class QueueServiceImpl implements QueueService {
 
     @Override
     public QueuePosition getPosition(Long tokenId) {
-        return queueRep
+        return queueRepository.findByToken_Id(tokenId)
+                .orElseThrow(() -> new RuntimeException("Position not found"));
+    }
+}
