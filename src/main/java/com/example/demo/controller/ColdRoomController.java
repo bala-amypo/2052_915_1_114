@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/cold-rooms")
 public class ColdRoomController {
-    // placeholder controller
+    
 }
