@@ -5,9 +5,11 @@ import com.example.demo.entity.TokenLog;
 import com.example.demo.repository.TokenLogRepository;
 import com.example.demo.repository.TokenRepository;
 import com.example.demo.service.TokenLogService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service   // 🔴 REQUIRED
 public class TokenLogServiceImpl implements TokenLogService {
 
     private final TokenLogRepository logRepository;
@@ -24,16 +26,3 @@ public class TokenLogServiceImpl implements TokenLogService {
 
         Token token = tokenRepository.findById(tokenId)
                 .orElseThrow(() -> new RuntimeException("Token not found"));
-
-        TokenLog log = new TokenLog();
-        log.setToken(token);
-        log.setMessage(msg);
-
-        return logRepository.save(log);
-    }
-
-    @Override
-    public List<TokenLog> getLogs(Long tokenId) {
-        return logRepository.findByToken_IdOrderByLoggedAtAsc(tokenId);
-    }
-}
