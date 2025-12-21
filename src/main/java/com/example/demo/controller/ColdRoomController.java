@@ -1,28 +1,29 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.ColdRoom;
-import com.example.demo.service.ColdRoomService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cold-rooms")
+@RequestMapping("/coldrooms")
 public class ColdRoomController {
 
-    private final ColdRoomService coldRoomService;
-
-    public ColdRoomController(ColdRoomService coldRoomService) {
-        this.coldRoomService = coldRoomService;
-    }
-
     @PostMapping
-    public ColdRoom create(@RequestBody ColdRoom room) {
-        return coldRoomService.create(room);
+    public ColdRoom create(@RequestBody ColdRoom coldRoom) {
+        return coldRoom;
     }
 
     @GetMapping
     public List<ColdRoom> getAll() {
-        return coldRoomService.getAll();
+        return Collections.emptyList();
+    }
+
+    @GetMapping("/{id}")
+    public ColdRoom getById(@PathVariable Long id) {
+        ColdRoom cr = new ColdRoom();
+        cr.setId(id);
+        return cr;
     }
 }

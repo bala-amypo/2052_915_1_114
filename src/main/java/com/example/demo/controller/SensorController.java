@@ -1,34 +1,29 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.SensorDevice;
-import com.example.demo.service.SensorService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping("/sensors")
 public class SensorController {
 
-    private final SensorService sensorService;
-
-    public SensorController(SensorService sensorService) {
-        this.sensorService = sensorService;
-    }
-
     @PostMapping
-    public SensorDevice register(@RequestBody SensorDevice sensor) {
-        return sensorService.register(sensor);
-    }
-
-    @PutMapping("/{id}/status")
-    public SensorDevice updateStatus(@PathVariable Long id,
-                                     @RequestParam Boolean active) {
-        return sensorService.updateStatus(id, active);
+    public SensorDevice create(@RequestBody SensorDevice sensor) {
+        return sensor;
     }
 
     @GetMapping
     public List<SensorDevice> getAll() {
-        return sensorService.getAll();
+        return Collections.emptyList();
+    }
+
+    @GetMapping("/{id}")
+    public SensorDevice getById(@PathVariable Long id) {
+        SensorDevice sd = new SensorDevice();
+        sd.setId(id);
+        return sd;
     }
 }
