@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.entity.Token;
 import com.example.demo.service.TokenService;
 import org.springframework.web.bind.annotation.*;
-package com.example.demo.service.impl;
 
 @RestController
 @RequestMapping("/tokens")
@@ -21,7 +20,8 @@ public class TokenController {
     }
 
     @PutMapping("/{id}/status")
-    public Token update(@PathVariable Long id, @RequestParam String status) {
+    public Token update(@PathVariable Long id,
+                        @RequestParam String status) {
         return service.updateStatus(id, status);
     }
 
