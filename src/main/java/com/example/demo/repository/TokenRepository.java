@@ -2,6 +2,11 @@ package com.example.demo.repository;
 
 import com.example.demo.entity.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
+package com.example.demo.service.impl;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface TokenRepository extends JpaRepository<Token, Long> {
+    Optional<Token> findByTokenNumber(String tokenNumber);
 }
