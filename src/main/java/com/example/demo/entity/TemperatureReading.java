@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -12,12 +13,17 @@ public class TemperatureReading {
 
     private Double temperature;
 
-    private LocalDateTime recordedAt = LocalDateTime.now();
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
+    private LocalDateTime recordedAt;
 
     @ManyToOne
     @JoinColumn(name = "sensor_id")
     private SensorDevice sensorDevice;
 
+    // REQUIRED default constructor
+    public TemperatureReading() {}
+
+    // Getters & Setters
     public Long getId() {
         return id;
     }

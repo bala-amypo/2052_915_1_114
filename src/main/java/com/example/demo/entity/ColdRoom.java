@@ -1,29 +1,74 @@
-package com.example.demo.controller;
+package com.example.demo.entity;
 
-import com.example.demo.entity.ColdRoom;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import java.util.List;
 
-@RestController
-@RequestMapping("/coldrooms")
-public class ColdRoomController {
+@Entity
+public class ColdRoom {
 
-    @PostMapping
-    public ColdRoom create(@RequestBody ColdRoom coldRoom) {
-        return coldRoom;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String roomName;
+    private String location;
+    private Double minTemperature;
+    private Double maxTemperature;
+
+    @OneToMany(mappedBy = "coldRoom", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<SensorDevice> sensors;
+
+    // REQUIRED default constructor
+    public ColdRoom() {}
+
+    // Getters & Setters
+    public Long getId() {
+        return id;
     }
 
-    @GetMapping
-    public List<ColdRoom> getAll() {
-        return Collections.emptyList();
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    @GetMapping("/{id}")
-    public ColdRoom getById(@PathVariable Long id) {
-        ColdRoom cr = new ColdRoom();
-        cr.setId(id);
-        return cr;
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Double getMinTemperature() {
+        return minTemperature;
+    }
+
+    public void setMinTemperature(Double minTemperature) {
+        this.minTemperature = minTemperature;
+    }
+
+    public Double getMaxTemperature() {
+        return maxTemperature;
+    }
+
+    public void setMaxTemperature(Double maxTemperature) {
+        this.maxTemperature = maxTemperature;
+    }
+
+    public List<SensorDevice> getSensors() {
+        return sensors;
+    }
+
+    public void setSensors(List<SensorDevice> sensors) {
+        this.sensors = sensors;
     }
 }

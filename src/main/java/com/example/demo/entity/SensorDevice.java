@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -11,16 +12,20 @@ public class SensorDevice {
     private Long id;
 
     private String sensorCode;
-
     private Boolean active = true;
 
     @ManyToOne
     @JoinColumn(name = "cold_room_id")
+    @JsonBackReference
     private ColdRoom coldRoom;
 
     @OneToMany(mappedBy = "sensorDevice", cascade = CascadeType.ALL)
     private List<TemperatureReading> readings;
 
+    // REQUIRED default constructor
+    public SensorDevice() {}
+
+    // Getters & Setters
     public Long getId() {
         return id;
     }
