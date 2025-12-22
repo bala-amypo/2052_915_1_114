@@ -31,8 +31,14 @@ public class Token {
         this.serviceCounter = counter;
     }
 
+    // 🔴 REQUIRED GETTERS / SETTERS
     public Long getId() { return id; }
+
     public String getStatus() { return status; }
+
     public void setStatus(String status) { this.status = status; }
-    public void setCompletedAt(LocalDateTime time) { this.completedAt = time; }
+
+    public void setCompletedAt(LocalDateTime completedAt) {
+        this.completedAt = completedAt;
+    }
 }

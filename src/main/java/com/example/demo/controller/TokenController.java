@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Token;
 import com.example.demo.service.TokenService;
 import org.springframework.web.bind.annotation.*;
+package com.example.demo.service.impl;
 
 @RestController
 @RequestMapping("/tokens")

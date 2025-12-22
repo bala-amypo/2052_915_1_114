@@ -3,15 +3,18 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "service_counters")
 public class ServiceCounter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String counterName;
     private Boolean isActive;
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
 
     public ServiceCounter() {}
 
