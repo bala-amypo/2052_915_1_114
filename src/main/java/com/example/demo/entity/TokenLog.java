@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "token_logs")
 public class TokenLog {
 
     @Id
@@ -11,20 +12,50 @@ public class TokenLog {
     private Long id;
 
     @ManyToOne
-    private Token token;
+    @JoinColumn(name = "token_id")
+    private BreachAlert token;
 
-    private String message;
+    private String logMessage;
+    private LocalDateTime loggedAt;
 
-    private LocalDateTime loggedAt = LocalDateTime.now();
+    @PrePersist
+    public void onCreate() {
+        this.loggedAt = LocalDateTime.now();
+    }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public TokenLog() {
+    }
 
-    public Token getToken() { return token; }
-    public void setToken(Token token) { this.token = token; }
+    public TokenLog(BreachAlert token, String logMessage) {
+        this.token = token;
+        this.logMessage = logMessage;
+    }
 
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
+    public Long getId() {
+        return id;
+    }
 
-    public LocalDateTime getLoggedAt() { return loggedAt; }
+    public BreachAlert getToken() {
+        return token;
+    }
+
+    public String getLogMessage() {
+        return logMessage;
+    }
+
+    public LocalDateTime getLoggedAt() {
+        return loggedAt;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setToken(BreachAlert token) {
+        this.token = token;
+    }
+
+    public void setLogMessage(String logMessage) {
+        this.logMessage = logMessage;
+    }
 }
