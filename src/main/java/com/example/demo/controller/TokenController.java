@@ -8,25 +8,24 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/tokens")
 public class TokenController {
 
-    private final TokenService tokenService;
+    private final TokenService service;
 
-    public TokenController(TokenService tokenService) {
-        this.tokenService = tokenService;
+    public TokenController(TokenService service) {
+        this.service = service;
     }
 
-    @PostMapping("/issue/{counterId}")
-    public Token issue(@PathVariable Long counterId) {
-        return tokenService.issueToken(counterId);
+    @PostMapping("/counter/{id}")
+    public Token issue(@PathVariable Long id) {
+        return service.issueToken(id);
+    }
+
+    @PutMapping("/{id}/status")
+    public Token update(@PathVariable Long id, @RequestParam String status) {
+        return service.updateStatus(id, status);
     }
 
     @GetMapping("/{id}")
     public Token get(@PathVariable Long id) {
-        return tokenService.getToken(id);
-    }
-
-    @PutMapping("/{id}/status")
-    public Token updateStatus(@PathVariable Long id,
-                              @RequestParam String status) {
-        return tokenService.updateStatus(id, status);
+        return service.get(id);
     }
 }
