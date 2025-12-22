@@ -8,5 +8,4 @@ import java.util.Optional;
 
 public interface TokenRepository extends JpaRepository<Token, Long> {
     Optional<Token> findByTokenNumber(String tokenNumber);
-    List<Token> findByServiceCounter_IdAndStatusOrderByIssuedAtAsc(Long id, String status);
 }
