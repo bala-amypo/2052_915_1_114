@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // 🔴 REQUIRED
+@Service   
 public class ServiceCounterServiceImpl implements ServiceCounterService {
 
     private final ServiceCounterRepository repository;

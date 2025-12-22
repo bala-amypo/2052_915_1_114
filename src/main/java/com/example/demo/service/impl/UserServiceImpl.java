@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 
-@Service   // 🔴 THIS IS REQUIRED
+@Service  
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;

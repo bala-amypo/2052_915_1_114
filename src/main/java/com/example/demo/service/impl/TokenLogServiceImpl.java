@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // 🔴 REQUIRED
+@Service
 public class TokenLogServiceImpl implements TokenLogService {
 
     private final TokenLogRepository logRepository;
@@ -23,8 +23,18 @@ public class TokenLogServiceImpl implements TokenLogService {
 
     @Override
     public TokenLog addLog(Long tokenId, String msg) {
-
         Token token = tokenRepository.findById(tokenId)
                 .orElseThrow(() -> new RuntimeException("Token not found"));
-}
+
+        TokenLog log = new TokenLog();
+        log.setToken(token);
+        log.setMessage(msg);
+
+        return logRepository.save(log);
+    }
+
+    @Override
+    public List<TokenLog> getLogs(Long tokenId) {
+        return logRepository.findByToken_IdOrderByLoggedAtAsc(tokenId);
+    }
 }
