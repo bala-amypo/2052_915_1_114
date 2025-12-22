@@ -31,7 +31,7 @@ public class Token {
         this.serviceCounter = counter;
     }
 
-    // 🔴 REQUIRED GETTERS / SETTERS
+    
     public Long getId() { return id; }
 
     public String getStatus() { return status; }
