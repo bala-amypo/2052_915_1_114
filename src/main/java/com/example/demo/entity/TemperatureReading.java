@@ -1,58 +1,75 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "temperature_readings")
 public class TemperatureReading {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double temperature;
-
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
-    private LocalDateTime recordedAt;
-
     @ManyToOne
     @JoinColumn(name = "sensor_id")
-    private SensorDevice sensorDevice;
+    private SensorDevice sensor;
 
-    // REQUIRED default constructor
-    public TemperatureReading() {}
+    @ManyToOne
+    @JoinColumn(name = "cold_room_id")
+    private ColdRoom coldRoom;
 
-    // Getters & Setters
+    private Double readingValue;
+    private LocalDateTime recordedAt;
+
+    public TemperatureReading() {
+    }
+
+    public TemperatureReading(SensorDevice sensor, ColdRoom coldRoom,
+                              Double readingValue, LocalDateTime recordedAt) {
+        this.sensor = sensor;
+        this.coldRoom = coldRoom;
+        this.readingValue = readingValue;
+        this.recordedAt = recordedAt;
+    }
+
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public SensorDevice getSensor() {
+        return sensor;
     }
 
-    public Double getTemperature() {
-        return temperature;
+    public ColdRoom getColdRoom() {
+        return coldRoom;
     }
 
-    public void setTemperature(Double temperature) {
-        this.temperature = temperature;
+    public Double getReadingValue() {
+        return readingValue;
     }
 
     public LocalDateTime getRecordedAt() {
         return recordedAt;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setSensor(SensorDevice sensor) {
+        this.sensor = sensor;
+    }
+
+    public void setColdRoom(ColdRoom coldRoom) {
+        this.coldRoom = coldRoom;
+    }
+
+    public void setReadingValue(Double readingValue) {
+        this.readingValue = readingValue;
+    }
+
     public void setRecordedAt(LocalDateTime recordedAt) {
         this.recordedAt = recordedAt;
-    }
-
-    public SensorDevice getSensorDevice() {
-        return sensorDevice;
-    }
-
-    public void setSensorDevice(SensorDevice sensorDevice) {
-        this.sensorDevice = sensorDevice;
     }
 }

@@ -1,68 +1,62 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
+@Table(name = "sensor_devices")
 public class SensorDevice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String sensorCode;
-    private Boolean active = true;
+    @Column(unique = true)
+    private String identifier;
 
     @ManyToOne
     @JoinColumn(name = "cold_room_id")
-    @JsonBackReference
     private ColdRoom coldRoom;
 
-    @OneToMany(mappedBy = "sensorDevice", cascade = CascadeType.ALL)
-    private List<TemperatureReading> readings;
+    private Boolean isActive;
 
-    // REQUIRED default constructor
-    public SensorDevice() {}
+    public SensorDevice() {
+    }
 
-    // Getters & Setters
+    public SensorDevice(String identifier, ColdRoom coldRoom, Boolean isActive) {
+        this.identifier = identifier;
+        this.coldRoom = coldRoom;
+        this.isActive = isActive;
+    }
+
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getSensorCode() {
-        return sensorCode;
-    }
-
-    public void setSensorCode(String sensorCode) {
-        this.sensorCode = sensorCode;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
+    public String getIdentifier() {
+        return identifier;
     }
 
     public ColdRoom getColdRoom() {
         return coldRoom;
     }
 
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
     public void setColdRoom(ColdRoom coldRoom) {
         this.coldRoom = coldRoom;
     }
 
-    public List<TemperatureReading> getReadings() {
-        return readings;
-    }
-
-    public void setReadings(List<TemperatureReading> readings) {
-        this.readings = readings;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 }
