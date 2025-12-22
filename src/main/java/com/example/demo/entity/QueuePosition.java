@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "queue_positions")
 public class QueuePosition {
 
     @Id
@@ -14,16 +15,18 @@ public class QueuePosition {
     private Token token;
 
     private Integer position;
-
     private LocalDateTime updatedAt;
 
-    public Long getId() { return id; }
-    public Token getToken() { return token; }
-    public Integer getPosition() { return position; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public QueuePosition() {}
 
-    public void setId(Long id) { this.id = id; }
-    public void setToken(Token token) { this.token = token; }
-    public void setPosition(Integer position) { this.position = position; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public QueuePosition(Token token, Integer position) {
+        this.token = token;
+        this.position = position;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+        this.updatedAt = LocalDateTime.now();
+    }
 }
