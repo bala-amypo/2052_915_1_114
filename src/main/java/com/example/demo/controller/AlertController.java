@@ -5,7 +5,7 @@ import com.example.demo.service.TokenService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/alerts")
+@RequestMapping("/alert")
 public class AlertController {
 
     private final TokenService tokenService;
@@ -15,7 +15,7 @@ public class AlertController {
     }
 
     @GetMapping("/{id}")
-    public Token getAlert(@PathVariable Long id) {
+    public Token get(@PathVariable Long id) {
         return tokenService.getToken(id);
     }
 }
