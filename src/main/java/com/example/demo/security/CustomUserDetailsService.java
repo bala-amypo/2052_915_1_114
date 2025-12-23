@@ -18,17 +18,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email)
+    public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
 
-        // 👇 This is YOUR ENTITY User
-        User appUser = userRepository.findByEmail(email)
+        User appUser = userRepository.findByUsername(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found"));
 
-        // 👇 This is SPRING SECURITY User
         return new org.springframework.security.core.userdetails.User(
-                appUser.getEmail(),
+                appUser.getUsername(),   
                 appUser.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_" + appUser.getRole()))
         );
