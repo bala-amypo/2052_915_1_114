@@ -24,4 +24,24 @@ public class QueuePosition {
         this.position = position;
         this.updatedAt = updatedAt;
     }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public BreachAlert getToken() {
+        return token;
+    }
 }

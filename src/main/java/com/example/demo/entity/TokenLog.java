@@ -24,4 +24,8 @@ public class TokenLog {
         this.logMessage = logMessage;
         this.loggedAt = loggedAt;
     }
+
+    public String getLogMessage() {
+        return logMessage;
+    }
 }

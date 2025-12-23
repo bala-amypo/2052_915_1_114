@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 public class JwtTokenProvider {
 
     public String generateToken(Long id, String email, String role) {
-        return "dummy-jwt-token";
+        return "dummy-token";
     }
 }
