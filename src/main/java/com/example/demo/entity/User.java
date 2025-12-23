@@ -18,10 +18,10 @@ public class User {
     private String password;
     private String role;
 
-    // REQUIRED
+  
     public User() {}
 
-    // REQUIRED (THIS FIXES YOUR ERROR)
+    
     public User(String name, String email, String password, String role) {
         this.name = name;
         this.email = email;

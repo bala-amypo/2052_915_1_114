@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Email exists");
         }
 
-        // NO password encoding (security removed)
+       
         if (user.getRole() == null) {
             user.setRole("STAFF");
         }
