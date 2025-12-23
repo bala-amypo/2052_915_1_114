@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.LoginRequest;
+import com.example.demo.entity.User;
+import com.example.demo.repository.UserRepository;
 import org.springframework.http.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -11,19 +14,34 @@ import java.util.Map;
 @CrossOrigin("*")
 public class AuthController {
 
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public AuthController(UserRepository userRepository,
+                          PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-        if ("sac".equals(request.getUsername()) &&
-            "sai123".equals(request.getPassword())) {
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElse(null);
 
-            return ResponseEntity.ok(
-                Map.of("token", "dummy-jwt-token")
-            );
+        if (user == null ||
+            !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Invalid username or password"));
         }
 
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("error", "Invalid credentials"));
+        return ResponseEntity.ok(
+                Map.of(
+                    "message", "Login successful",
+                    "username", user.getUsername(),
+                    "role", user.getRole()
+                )
+        );
     }
 }
