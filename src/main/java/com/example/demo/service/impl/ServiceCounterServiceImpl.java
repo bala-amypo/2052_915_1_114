@@ -7,22 +7,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   
+@Service
 public class ServiceCounterServiceImpl implements ServiceCounterService {
 
-    private final ServiceCounterRepository repository;
+    private final ServiceCounterRepository serviceCounterRepository;
 
-    public ServiceCounterServiceImpl(ServiceCounterRepository repository) {
-        this.repository = repository;
+    public ServiceCounterServiceImpl(ServiceCounterRepository serviceCounterRepository) {
+        this.serviceCounterRepository = serviceCounterRepository;
     }
 
     @Override
-    public ServiceCounter addCounter(ServiceCounter sc) {
-        return repository.save(sc);
-    }
-
-    @Override
-    public List<ServiceCounter> getActiveCounters() {
-        return repository.findByIsActiveTrue();
+    public List<ServiceCounter> findAll() {
+        return serviceCounterRepository.findAll();
     }
 }
