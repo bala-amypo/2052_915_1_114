@@ -1,11 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.security.CustomUserDetailsService;
+import com.example.demo.entity.User;
 import com.example.demo.security.JwtUtil;
+import com.example.demo.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,32 +12,21 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
+    private AuthService authService;
 
     @Autowired
     private JwtUtil jwtUtil;
 
-    @PostMapping("/login")
-    public String login(@RequestBody AuthRequest authRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
-        );
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
-        return jwtUtil.generateToken(userDetails);
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody User user) {
+        User savedUser = authService.register(user.getUsername(), user.getPassword(), user.getRole());
+        return ResponseEntity.ok(savedUser);
     }
 
-    public static class AuthRequest {
-        private String username;
-        private String password;
-
-        public String getUsername() { return username; }
-        public void setUsername(String username) { this.username = username; }
-
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User user) {
+        User authenticatedUser = authService.authenticate(user.getUsername(), user.getPassword());
+        String token = jwtUtil.generateToken(authenticatedUser.getUsername());
+        return ResponseEntity.ok("{\"token\": \"" + token + "\"}");
     }
 }
