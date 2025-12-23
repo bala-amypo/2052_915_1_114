@@ -12,20 +12,19 @@ public class TokenLog {
     private Long id;
 
     @ManyToOne
-    private Token token;
+    private BreachAlert token;
 
     private String logMessage;
-
     private LocalDateTime loggedAt;
 
     @PrePersist
-    void onCreate() {
+    public void onCreate() {
         loggedAt = LocalDateTime.now();
     }
 
     public TokenLog() {}
 
-    public TokenLog(Token token, String logMessage) {
+    public TokenLog(BreachAlert token, String logMessage) {
         this.token = token;
         this.logMessage = logMessage;
     }

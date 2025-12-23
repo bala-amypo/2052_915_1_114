@@ -1,12 +1,9 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Token;
+import com.example.demo.entity.BreachAlert;
 import org.springframework.data.jpa.repository.JpaRepository;
-package com.example.demo.service.impl;
-
-import java.util.List;
 import java.util.Optional;
 
-public interface TokenRepository extends JpaRepository<Token, Long> {
-    Optional<Token> findByTokenNumber(String tokenNumber);
+public interface TokenRepository extends JpaRepository<BreachAlert, Long> {
+    Optional<BreachAlert> findByTokenNumber(String tokenNumber);
 }

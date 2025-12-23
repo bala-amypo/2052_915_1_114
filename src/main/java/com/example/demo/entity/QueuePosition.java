@@ -12,14 +12,14 @@ public class QueuePosition {
     private Long id;
 
     @OneToOne
-    private Token token;
+    private BreachAlert token;
 
     private Integer position;
     private LocalDateTime updatedAt;
 
     public QueuePosition() {}
 
-    public QueuePosition(Token token, Integer position) {
+    public QueuePosition(BreachAlert token, Integer position) {
         this.token = token;
         this.position = position;
         this.updatedAt = LocalDateTime.now();
