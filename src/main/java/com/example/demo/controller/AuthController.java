@@ -1,11 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.User;
-import com.example.demo.service.AuthService;
-import com.example.demo.util.JwtUtil;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.*;
-import org.springframework.security.core.Authentication;
+import com.example.demo.security.CustomUserDetailsService;
+import com.example.demo.security.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,44 +12,33 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthService authService;
-    private final AuthenticationManager authManager;
-    private final JwtUtil jwtUtil;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    public AuthController(AuthService authService, AuthenticationManager authManager, JwtUtil jwtUtil) {
-        this.authService = authService;
-        this.authManager = authManager;
-        this.jwtUtil = jwtUtil;
-    }
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        authService.saveUser(user);
-        return ResponseEntity.ok("User registered successfully");
-    }
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
-        try {
-            Authentication auth = authManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
-            );
+    public String login(@RequestBody AuthRequest authRequest) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+        );
 
-            UserDetails userDetails = (UserDetails) auth.getPrincipal();
-            String token = jwtUtil.generateToken(userDetails.getUsername());
-
-            return ResponseEntity.ok(new AuthResponse(token));
-
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).body("Invalid Credentials");
-        }
+        UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
+        return jwtUtil.generateToken(userDetails);
     }
 
-    // Response DTO
-    static class AuthResponse {
-        private String token;
-        public AuthResponse(String token) { this.token = token; }
-        public String getToken() { return token; }
-        public void setToken(String token) { this.token = token; }
+    public static class AuthRequest {
+        private String username;
+        private String password;
+
+        public String getUsername() { return username; }
+        public void setUsername(String username) { this.username = username; }
+
+        public String getPassword() { return password; }
+        public void setPassword(String password) { this.password = password; }
     }
 }
