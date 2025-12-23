@@ -4,28 +4,18 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "token_logs")
 public class TokenLog {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @ManyToOne
-    private BreachAlert token;
+    private Token token;
 
-    private String logMessage;
-    private LocalDateTime loggedAt;
+    private String message;
+    private LocalDateTime loggedAt = LocalDateTime.now();
 
-    @PrePersist
-    public void onCreate() {
-        loggedAt = LocalDateTime.now();
-    }
-
-    public TokenLog() {}
-
-    public TokenLog(BreachAlert token, String logMessage) {
-        this.token = token;
-        this.logMessage = logMessage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

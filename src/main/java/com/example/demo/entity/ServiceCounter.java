@@ -3,13 +3,10 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-public class QueuePosition {
+public class ServiceCounter {
     @Id
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    private Token token;
-
-    private Integer position;
+    private String name;
 }
