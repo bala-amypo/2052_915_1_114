@@ -12,7 +12,7 @@ public class JwtTokenProvider {
     private final long validityInMilliseconds;
 
     public JwtTokenProvider() {
-        this("mySuperSecretKey1234567890", 86400000);
+        this("mySuperSecretKeyThatIsAtLeast32CharactersLongForJWT123456789", 86400000);
     }
 
     public JwtTokenProvider(String secretKey, long validityInMilliseconds) {

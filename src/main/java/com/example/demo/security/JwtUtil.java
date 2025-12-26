@@ -44,22 +44,22 @@ public class JwtUtil {
     }
 
     public Jws<Claims> parseToken(String token) {
-        return Jwts.parser()
-                .verifyWith(getSigningKey())
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token);
     }
 
     public String extractUsername(String token) {
-        return parseToken(token).getPayload().getSubject();
+        return parseToken(token).getBody().getSubject();
     }
 
     public String extractRole(String token) {
-        return parseToken(token).getPayload().get("role", String.class);
+        return parseToken(token).getBody().get("role", String.class);
     }
 
     public Long extractUserId(String token) {
-        Object id = parseToken(token).getPayload().get("userId");
+        Object id = parseToken(token).getBody().get("userId");
         if (id instanceof Integer) {
             return ((Integer) id).longValue();
         }
@@ -68,7 +68,7 @@ public class JwtUtil {
 
     public boolean isTokenValid(String token, String expectedUsername) {
         try {
-            Claims claims = parseToken(token).getPayload();
+            Claims claims = parseToken(token).getBody();
             return claims.getSubject().equals(expectedUsername)
                     && claims.getExpiration().after(new Date());
         } catch (JwtException | IllegalArgumentException e) {
