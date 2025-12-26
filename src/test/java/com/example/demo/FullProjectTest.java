@@ -414,7 +414,7 @@ public void t22_tokenServiceUsesRepos() {
     // ---------------------------------------------------------
     // 7: Security & JWT tests (10 tests)
     // ---------------------------------------------------------
-    @Test(priority = 46, groups = {"security"})
+    @Test(priority+ = 46, groups = {"security"})
     public void t46_jwtGeneratesClaims() {
         JwtTokenProvider provider = new JwtTokenProvider("ChangeThisSecretKeyReplaceMe1234567890", 3600000);
         String token = provider.generateToken(1L,"e@x.com","ADMIN");
