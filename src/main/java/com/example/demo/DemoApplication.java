@@ -9,6 +9,10 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
     DataSourceAutoConfiguration.class, 
     HibernateJpaAutoConfiguration.class,
     org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration.class
+}, scanBasePackages = {
+    "com.example.demo.config",
+    "com.example.demo.security",
+    "com.example.demo.controller"
 })
 public class DemoApplication {
     public static void main(String[] args) {
