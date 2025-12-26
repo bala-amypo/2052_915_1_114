@@ -1,57 +1,84 @@
 package com.example.demo.service.impl;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.BreachAlert;
-import com.example.demo.entity.ServiceCounter;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.ServiceCounterRepository;
-import com.example.demo.repository.TokenRepository;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
 import com.example.demo.service.TokenService;
+import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class TokenServiceImpl implements TokenService {
+    private final TokenRepository tokenRepository;
+    private final ServiceCounterRepository counterRepository;
+    private final TokenLogRepository logRepository;
+    private final QueuePositionRepository queueRepository;
 
-    private final TokenRepository tokenRepo;
-    private final ServiceCounterRepository counterRepo;
-
-    public TokenServiceImpl(TokenRepository tokenRepo,
-                            ServiceCounterRepository counterRepo) {
-        this.tokenRepo = tokenRepo;
-        this.counterRepo = counterRepo;
+    public TokenServiceImpl(TokenRepository tokenRepository, ServiceCounterRepository counterRepository, 
+                           TokenLogRepository logRepository, QueuePositionRepository queueRepository) {
+        this.tokenRepository = tokenRepository;
+        this.counterRepository = counterRepository;
+        this.logRepository = logRepository;
+        this.queueRepository = queueRepository;
     }
 
     @Override
-    public BreachAlert createToken(Long counterId) {
-        ServiceCounter counter = counterRepo.findById(counterId)
-                .orElseThrow(() -> new ResourceNotFoundException("Counter not found"));
-
-        if (!Boolean.TRUE.equals(counter.getIsActive())) {
-            throw new IllegalArgumentException("Counter not active");
+    public Token issueToken(Long counterId) {
+        ServiceCounter counter = counterRepository.findById(counterId)
+            .orElseThrow(() -> new RuntimeException("Counter not found"));
+        
+        if (!counter.getIsActive()) {
+            throw new IllegalArgumentException("Counter is not active");
         }
 
-        BreachAlert alert = new BreachAlert(
-                UUID.randomUUID().toString(),
-                "OPEN",
-                LocalDateTime.now()
-        );
+        Token token = new Token();
+        token.setServiceCounter(counter);
+        token.setTokenNumber(counter.getCounterName() + "-" + System.currentTimeMillis());
+        token.setStatus("WAITING");
+        token = tokenRepository.save(token);
 
-        return tokenRepo.save(alert);
+        List<Token> waitingTokens = tokenRepository.findByServiceCounter_IdAndStatusOrderByIssuedAtAsc(counterId, "WAITING");
+        
+        QueuePosition queuePosition = new QueuePosition();
+        queuePosition.setToken(token);
+        queuePosition.setPosition(waitingTokens.size());
+        queueRepository.save(queuePosition);
+
+        TokenLog log = new TokenLog();
+        log.setToken(token);
+        log.setMessage("Token issued");
+        logRepository.save(log);
+
+        return token;
     }
 
     @Override
-    public BreachAlert updateStatus(Long tokenId, String status) {
-        BreachAlert alert = getToken(tokenId);
-        alert.setStatus(status);
-        return tokenRepo.save(alert);
+    public Token updateStatus(Long tokenId, String status) {
+        Token token = tokenRepository.findById(tokenId)
+            .orElseThrow(() -> new RuntimeException("Token not found"));
+
+        if ("WAITING".equals(token.getStatus()) && "COMPLETED".equals(status)) {
+            throw new IllegalArgumentException("Invalid status transition");
+        }
+
+        token.setStatus(status);
+        if ("COMPLETED".equals(status) || "CANCELLED".equals(status)) {
+            token.setCompletedAt(LocalDateTime.now());
+        }
+        
+        token = tokenRepository.save(token);
+
+        TokenLog log = new TokenLog();
+        log.setToken(token);
+        log.setMessage("Status updated to " + status);
+        logRepository.save(log);
+
+        return token;
     }
 
     @Override
-    public BreachAlert getToken(Long tokenId) {
-        return tokenRepo.findById(tokenId)
-                .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
+    public Token getToken(Long tokenId) {
+        return tokenRepository.findById(tokenId)
+            .orElseThrow(() -> new RuntimeException("Token not found"));
     }
 }

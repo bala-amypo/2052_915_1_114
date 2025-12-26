@@ -1,29 +1,26 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.example.demo.entity.ServiceCounter;
 import com.example.demo.repository.ServiceCounterRepository;
 import com.example.demo.service.ServiceCounterService;
+import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class ServiceCounterServiceImpl implements ServiceCounterService {
+    private final ServiceCounterRepository counterRepository;
 
-    private final ServiceCounterRepository repo;
-
-    public ServiceCounterServiceImpl(ServiceCounterRepository repo) {
-        this.repo = repo;
+    public ServiceCounterServiceImpl(ServiceCounterRepository counterRepository) {
+        this.counterRepository = counterRepository;
     }
 
     @Override
     public ServiceCounter addCounter(ServiceCounter counter) {
-        return repo.save(counter);
+        return counterRepository.save(counter);
     }
 
     @Override
     public List<ServiceCounter> getActiveCounters() {
-        return repo.findByIsActiveTrue();
+        return counterRepository.findByIsActiveTrue();
     }
 }
