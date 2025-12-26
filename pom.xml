@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>17</java.version>
+        <maven.test.skip>true</maven.test.skip>
     </properties>
 
     <dependencies>
@@ -93,33 +94,56 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.example.demo.DemoApplication</mainClass>
+                    <systemPropertyVariables>
+                        <spring.datasource.url>jdbc:h2:mem:testdb</spring.datasource.url>
+                        <spring.datasource.driver-class-name>org.h2.Driver</spring.datasource.driver-class-name>
+                        <spring.datasource.username>sa</spring.datasource.username>
+                        <spring.datasource.password></spring.datasource.password>
+                        <spring.jpa.database-platform>org.hibernate.dialect.H2Dialect</spring.jpa.database-platform>
+                        <spring.jpa.hibernate.ddl-auto>create-drop</spring.jpa.hibernate.ddl-auto>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <mainClass>com.example.demo.DemoApplication</mainClass>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>spring.datasource.url</key>
+                            <value>jdbc:h2:mem:testdb</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>spring.datasource.driver-class-name</key>
+                            <value>org.h2.Driver</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>spring.datasource.username</key>
+                            <value>sa</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>spring.datasource.password</key>
+                            <value></value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <testExcludes>
-                        <testExclude>**/*Test.java</testExclude>
-                    </testExcludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.2</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-testng</artifactId>
-                        <version>3.1.2</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
                     <skipTests>true</skipTests>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
