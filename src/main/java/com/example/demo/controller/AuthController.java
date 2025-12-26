@@ -35,11 +35,11 @@ public class AuthController {
         user.setPassword(request.getPassword());
         User created = userService.register(user);
         
-        String token = jwtTokenProvider.generateToken(created.getId(), created.getEmail(), "STAFF");
+        String token = jwtTokenProvider.generateToken(created.getId(), created.getEmail(), created.getRole());
         AuthResponse response = new AuthResponse();
         response.setToken(token);
         response.setEmail(created.getEmail());
-        response.setRole("STAFF");
+        response.setRole(created.getRole());
         return response;
     }
 
@@ -49,11 +49,11 @@ public class AuthController {
     public AuthResponse login(@RequestBody AuthRequest request) {
         User user = userService.findByEmail(request.getEmail());
         if (user != null && passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            String token = jwtTokenProvider.generateToken(user.getId(), user.getEmail(), "STAFF");
+            String token = jwtTokenProvider.generateToken(user.getId(), user.getEmail(), user.getRole());
             AuthResponse response = new AuthResponse();
             response.setToken(token);
             response.setEmail(user.getEmail());
-            response.setRole("STAFF");
+            response.setRole(user.getRole());
             return response;
         }
         throw new RuntimeException("Invalid credentials");
