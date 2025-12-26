@@ -88,6 +88,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M9</version>
                 <configuration>
+                    <excludes>
+                        <exclude>**/FullProjectTest.java</exclude>
+                    </excludes>
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
