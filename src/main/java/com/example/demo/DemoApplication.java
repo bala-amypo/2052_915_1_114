@@ -11,8 +11,7 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
     org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration.class
 }, scanBasePackages = {
     "com.example.demo.config",
-    "com.example.demo.security",
-    "com.example.demo.controller"
+    "com.example.demo.security"
 })
 public class DemoApplication {
     public static void main(String[] args) {
