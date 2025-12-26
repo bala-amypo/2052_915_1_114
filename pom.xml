@@ -78,6 +78,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <jvmArguments>
+                        -Dspring.datasource.url=jdbc:h2:mem:testdb
+                        -Dspring.datasource.driver-class-name=org.h2.Driver
+                        -Dspring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+                    </jvmArguments>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
