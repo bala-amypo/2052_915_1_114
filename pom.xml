@@ -103,12 +103,14 @@
                 <configuration>
                     <testFailureIgnore>true</testFailureIgnore>
                     <skipTests>false</skipTests>
+                    <forkCount>0</forkCount>
                     <includes>
-                        <include>**/*Test*.java</include>
+                        <include>**/WorkingTestNG.java</include>
                     </includes>
-                    <excludes>
-                        <exclude>**/FullProjectTest.java</exclude>
-                    </excludes>
+                    <systemPropertyVariables>
+                        <spring.profiles.active>test</spring.profiles.active>
+                        <spring.datasource.url>jdbc:h2:mem:testdb</spring.datasource.url>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
@@ -127,8 +129,9 @@
                         <configuration>
                             <skipTests>false</skipTests>
                             <testFailureIgnore>true</testFailureIgnore>
+                            <forkCount>0</forkCount>
                             <includes>
-                                <include>**/FullProjectTest70.java</include>
+                                <include>**/WorkingTestNG.java</include>
                             </includes>
                         </configuration>
                     </plugin>
