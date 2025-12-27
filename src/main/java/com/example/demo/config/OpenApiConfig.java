@@ -17,7 +17,7 @@ public class OpenApiConfig {
                                     .info(new Info()
                                                             .title("Demo API")
                                                                                     .version("1.0")
-                                                                                                            .description("Demo Spring Boot API"))
+                                                                                    .description("Demo Spring Boot API"))
                                                                                                                             .servers(List.of(
                                                                                                                                                     new Server().url("https://9067.408procr.amypo.ai/")
                                                                                                                                                                     ));
