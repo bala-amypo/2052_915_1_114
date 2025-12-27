@@ -11,15 +11,15 @@ import java.util.List;
 @Configuration
 public class OpenApiConfig {
     
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Demo API")
-                        .version("1.0")
-                        .description("Demo Spring Boot API"))
-                .servers(List.of(
-                        new Server().url("https://9067.408procr.amypo.ai/")
-                ));
-    }
-}
+        @Bean
+            public OpenAPI customOpenAPI() {
+                    return new OpenAPI()
+                                    .info(new Info()
+                                                            .title("Demo API")
+                                                                                    .version("1.0")
+                                                                                                            .description("Demo Spring Boot API"))
+                                                                                                                            .servers(List.of(
+                                                                                                                                                    new Server().url("https://9067.408procr.amypo.ai/")
+                                                                                                                                                                    ));
+                                                                                                                                                                        }
+                                                                                                                                                                        }
